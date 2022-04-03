@@ -3,21 +3,26 @@ import { validateEmail } from "../util/validation.js"
 import bcrypt from "bcrypt";
 
 // create the schema for the user model
-const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: [true, "Email is missing, please enter your email"],
-        unique: true,
-        lowercase: true,
-        validate: [validateEmail, "Invalid email"]
-    },
+const userSchema = new mongoose.Schema(
+    {
+        email: {
+            type: String,
+            required: [true, "Email is missing, please enter your email"],
+            unique: true,
+            lowercase: true,
+            validate: [validateEmail, "Invalid email"]
+        },
 
-    password: {
-        type: String,
-        required: [true, "Password is missing, please enter a password"],
-        minlength: [8, "Password is too short, password must be at least 8 charecter"],
+        password: {
+            type: String,
+            required: [true, "Password is missing, please enter a password"],
+            minlength: [8, "Password is too short, password must be at least 8 charecter"],
+        }
+    }, 
+    {
+        timestamps: true        // store the date of last update 
     }
-});
+);
 
 // Before saving to the database
 userSchema.pre("save", async function (next) {

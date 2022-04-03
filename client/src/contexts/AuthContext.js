@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { isAuth } from "../api/AuthApi";
 
 export const AuthContext = createContext();
 
@@ -7,23 +8,25 @@ export function AuthProvider({children}) {
     const [loading, setLoading] = useState(true);
     
     useEffect( () => {
-        // call is Authenticated
+        
         setLoading(true);
-        fetch(
-            "http://localhost:4000/api/v1/is-authenticated",  
-            {credentials: 'include'}
-        )
-        .then( (res) => {
-            return res.json();  
-        })
+
+        // call is Authenticated
+        isAuth()
         .then( (data) => {
-            console.log(data)
+
+            // TODO: delete the print
+            console.log(data);
+
+            // if responce contain errors then user not auth
             if (data.errors) {
                 setUser(null);
             }
-            else {
+            else {  // auth user set the user state
                 setUser(data);
             }
+
+            // stop the loading
             setLoading(false);
         });
     } ,[]);
