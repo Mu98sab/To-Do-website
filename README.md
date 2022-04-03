@@ -1,5 +1,7 @@
-This Is ToDo website implemented with nodeJS for the backend and ReactJS for frontend.
+# ToDo website with nodeJS, mongoDB and ReactJS 
 
-    # Project State: in progress
+### Project State: in progress
 
-    # Development Stage: Developing an authentication API 
+### Development Stage 1: Developing an authentication API -DONE-
+
+### Development Stage 2: Biuld To Do backend and front end 
