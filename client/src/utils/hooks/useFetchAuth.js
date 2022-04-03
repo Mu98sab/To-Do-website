@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { fetchUserPOST } from "../../api/AuthApi";
 
-const useFetchAuth = (url) => {
+const useFetchAuth = (url, newUser) => {
     
     // initialize the input state 
     const [email, setEmail] = useState("");
@@ -9,16 +9,14 @@ const useFetchAuth = (url) => {
     const [rememberMe, setRememberMe] = useState(false);
 
     // initialize the error states
-    const [emailErr, setEmailErr] = useState("");
-    const [passwordErr, setPasswordErr] = useState(""); 
+    const [error, setError] = useState({});
 
 
     // form Submission controller 
-    const submitEvent = async (event) => {
+    const submitEvent = async (event, newUser) => {
 
         // set the errors to be an empty string 
-        setEmailErr("");
-        setPasswordErr("");
+        setError({});
 
         // prevent the default action of the form so that it will not send a post request automatically
         event.preventDefault();
@@ -27,15 +25,13 @@ const useFetchAuth = (url) => {
         try {
             
             // try to send POST req to the server 
-            const json = await fetchUserPOST(url, email, password);  
+            const json = await fetchUserPOST(url, newUser);  
             
              // TODO: delete the print
-             console.log(json)
-                
+             console.log(json);
              // then check if the json contain errors key, set the erros state to be the values getted from the errors key
              if (json.errors) {
-                 setEmailErr(json.errors.email);
-                 setPasswordErr(json.errors.password);
+                 setError(json.errors);
              }
              
              // if there is not errors
@@ -56,7 +52,7 @@ const useFetchAuth = (url) => {
     };
 
     // return the needed states and their setters
-    return {email, password, rememberMe, emailErr, passwordErr, setEmail, setPassword, setRememberMe, submitEvent};
+    return {email, password, rememberMe, error, setEmail, setPassword, setRememberMe, submitEvent};
 };
 
 export default useFetchAuth;

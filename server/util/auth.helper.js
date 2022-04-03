@@ -15,7 +15,7 @@ export const createToken = (id, expiringDate) => {          // expiring date wil
 export const formatRegisterationErr = (err) => {
 
     // initialize the error object which then returned back
-    let error = { email: "", password: "" };
+    let error = { email: "", password: "", name: "" };
 
     // if the data is missing some fields, call this function to get the sutible message
     missingErrHandler(err, error);
@@ -76,5 +76,8 @@ const missingErrHandler = (err, error) => {
         // assing each errors key with the coresponding error
         error.email = errorList[0];
         error.password = errorList[1];
+        if (Object.keys(error).length === 3) {
+            error.name = errorList[2];
+        }
     }
 };

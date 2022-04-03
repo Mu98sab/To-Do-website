@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema(
             validate: [validateEmail, "Invalid email"]
         },
 
+        name: {
+            type: String,
+            required: [ true, "User must have name" ]
+        },
+        
         password: {
             type: String,
             required: [true, "Password is missing, please enter a password"],

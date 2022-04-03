@@ -15,14 +15,14 @@ const expiringDate = 60 * 5;    // 5 minute
 export const registerController = async (req, res) => {
 
     // restructure both the email and the password
-    const {email, password} = req.body;
+    const {email, password, name} = req.body;
     
     // initialize the error object
-    const errors = { email: "", password: "" };
+    const errors = { email: "", password: "", name: "" };
 
     try {
 
-        if ((typeof email) === "undefined" || typeof password === "undefined" || email.trim() === "" || password.trim() === "") {
+        if ((typeof email) === "undefined" || (typeof password) === "undefined" || (typeof name) === "undefined" || email.trim() === "" || password.trim() === "" || name.trim() === "") {
             if (typeof email === "undefined" || email.trim() === "") {
                 errors.email = "Email cannot be empty";
             }
@@ -30,11 +30,15 @@ export const registerController = async (req, res) => {
                 errors.password = "Password cannot be empty";
             }
 
-            throw Error(errors.email + ":" + errors.password);
+            if (typeof name === "undefined" || name.trim() === "") {
+                errors.name = "Name cannot be empty";
+            }
+
+            throw Error(errors.email + ":" + errors.password + ":" + errors.name);
         }
 
         // try to create the user with thew passed email and password
-        const user = await User.create({email, password});
+        const user = await User.create({email, name, password});
 
         // create a new jwt token
         const jwtToken = createToken(user._id, expiringDate);

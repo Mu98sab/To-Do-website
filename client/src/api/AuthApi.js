@@ -15,14 +15,14 @@ export const logoutAPI = async () => {
 };
 
 // POST request to the server to either login or regiter depending on the url
-export const fetchUserPOST = async (url, email, password) => {
+export const fetchUserPOST = async (url, newUser) => {
 
     // send the POST request by passing the current email and password to url 
     const res = await fetch(
         url,
         {
             method: "POST",
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify(newUser),
             headers: {
                 "Content-Type": "application/json",
             },

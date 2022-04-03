@@ -12,8 +12,7 @@ export default function Login(props) {
         email,
         password, 
         rememberMe, 
-        emailErr, 
-        passwordErr, 
+        error,
         setEmail, 
         setPassword, 
         setRememberMe, 
@@ -23,7 +22,7 @@ export default function Login(props) {
     return (
         <div className={styles.flexContainer}>
 
-            <form className={styles.formContainer} onSubmit={submitEvent} > 
+            <form className={styles.formContainer} onSubmit={(event) => {submitEvent(event, {email, password})}} > 
                 
                 {/* Form header */}
                 <h1>Log In</h1>
@@ -32,20 +31,20 @@ export default function Login(props) {
                 <AuthInput 
                     name="Email" 
                     type="email" 
-                    placeholder="Enter your email" 
+                    placeHolder="Enter your email" 
                     setState={setEmail} 
                     value={email}
-                    error={emailErr}
+                    error={error.email ?? ""}
                 />
 
                 {/* Password auth input */}
                 <AuthInput 
                     name="Password" 
                     type="password" 
-                    placeholder="Enter your password" 
+                    placeHolder="Enter your password" 
                     setState={setPassword} 
                     value={password} 
-                    error={passwordErr}   
+                    error={error.password ?? ""}   
                 />
 
                 {/* Sumbit button */}
