@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { fetchUserPOST } from "../../api/AuthApi";
 
-const useFetchAuth = (url, newUser) => {
+const useFetchAuth = (url) => {
     
     // initialize the input state 
     const [email, setEmail] = useState("");

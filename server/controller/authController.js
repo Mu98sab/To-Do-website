@@ -1,8 +1,7 @@
 import User from "../model/User.js";
-import jwt  from "jsonwebtoken";
-import config from "../config.js";
 import bcrypt from "bcrypt";
-import { createToken, formatLoginErr, formatRegisterationErr } from "../util/auth.helper.js";
+import { createToken } from "../util/auth.helper.js";
+import { handleUserErr } from "../util/format.error.helper.js";
 
 
 // initialize the expiring date to be 2 weeks in seconds
@@ -52,20 +51,15 @@ export const registerController = async (req, res) => {
                 // secure: true,                // do not allow the cookies to be sent if the request is not from https protocol
                 maxAge: expiringDate * 1000     // set the expiring date. multiply it by 1000 because it accepts date in milli
             }
-        )
+        );
 
-        // if works fine, send the user object.
-        res.status(201).json(           // 201 means that the user has been created successfully
-            {
-                user: user._id, 
-            }
-        );             
+        // 201 means that the user has been created successfully
+        res.status( 201 ).json();             
     }
     catch (err) {
         // send an error with 400 status 
-        res.status(400).json({errors: formatRegisterationErr(err)});
+        res.status(400).json({errors: handleUserErr(err)});
     }
-
 };
 
 ////////// Login Controller ////////// 
@@ -116,11 +110,7 @@ export const loginController = async (req, res) => {
                     }
                 )
                 // if works fine, send the user object.
-                res.json(           // 201 means that the user has been created successfully
-                    {
-                        user: user._id,
-                    }
-                );
+                res.status( 204 ).json();
             }
             else {
                 throw Error("Incorrect password");
@@ -132,7 +122,7 @@ export const loginController = async (req, res) => {
     }
     catch (err) {
         // handle the error
-        res.status(400).json({errors: formatLoginErr(err)});
+        res.status(400).json({errors: handleUserErr(err)});
     }
 
 };
@@ -142,7 +132,6 @@ export const logoutController = (req, res) => {
 
     // // Create a new jwt token to override the previuos one 
     // const jwtToken = createToken(req.body.user, 1);
-
     // send a new cookie also to override the previuos cookie with small time to make the user logout
     res.cookie(
         "jwt", 
@@ -154,27 +143,14 @@ export const logoutController = (req, res) => {
         }
     );
     
-    res.json({});
+    res.status( 204 ).json({});
 
 };
 
 export const isAuthenticatedController = (req, res) => {
-    const jwtToken = req.cookies.jwt;
-    // check if the token exist
-    if (jwtToken) {
-        jwt.verify(jwtToken, config.jwtSecret, (err, paylod) => {
-            // check if there is an error, then it means that the token has been changed. Thus, user is unautherized
-            if (err) {
-                res.status(401).json({errors: "Unautherized"});
-            }
-            else {
-                res.json({user: paylod.id});
-            }
-        });
-    }   
-    else {
-        // unautheized user
-        res.status(401).json({errors: "Unautherized"});
-    }
+
+    // the id in the body come from the middleware
+    res.json({user: req.body.id});
+   
 };
 

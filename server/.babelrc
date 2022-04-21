@@ -1,0 +1,4 @@
+// this is to allow jest to work with es6 fatures
+{
+    "presets": ["@babel/preset-env"]
+}

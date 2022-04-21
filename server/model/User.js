@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { validateEmail } from "../util/validation.js" 
 import bcrypt from "bcrypt";
+import List from "./List.js";
 
 // create the schema for the user model
 const userSchema = new mongoose.Schema(
@@ -10,16 +11,19 @@ const userSchema = new mongoose.Schema(
             required: [true, "Email is missing, please enter your email"],
             unique: true,
             lowercase: true,
+            trim: true,
             validate: [validateEmail, "Invalid email"]
         },
 
         name: {
             type: String,
+            trim: true,
             required: [ true, "User must have name" ]
         },
         
         password: {
             type: String,
+            trim: true,
             required: [true, "Password is missing, please enter a password"],
             minlength: [8, "Password is too short, password must be at least 8 charecter"],
         }
@@ -30,7 +34,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // Before saving to the database
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function ( next ) {
     
     // Generate a salt (the string that is added to the password before applying the hash function)
     // this will increase the difficality for the hackers 
@@ -40,6 +44,18 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
 
     // go to the controller
+    next();
+});
+
+// After creating the user ( register ), create new List called General for the user 
+userSchema.post( "save", async function ( doc, next ) {
+
+    // Add new List for the current user called General
+    await List.create({
+        name: "General",
+        owner: doc._id,
+    });
+
     next();
 });
 
