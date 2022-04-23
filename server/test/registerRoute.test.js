@@ -1,4 +1,4 @@
-import { registerFetch } from '../util/test.helper';
+import { axiosInstance } from '../util/test.helper';
 
 
 // increase the time for test to be fail since we are dealing with promices
@@ -9,15 +9,26 @@ describe( "Testing Register Auth Routes", () => {
     // will fail if email is already there
     test( "Register Route: no issues",  () => {
         const newUser = {
-            email: "test@gmail.com",
+            email: "test2@gmail.com",
             name: "test",
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBe( 201 );
-            return res.json();
+            
+            return axiosInstance.delete(
+                "/user",
+                {
+                    headers: {
+                        "Cookie": res.headers["set-cookie"][0]
+                    }
+                }
+            );
         });
     });
 
@@ -27,15 +38,13 @@ describe( "Testing Register Auth Routes", () => {
             name: "test",
             password: "1234567489"
         };
-
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe( "Email cannot be empty" );
+            expect( res.data.errors.email ).toBe( "Email cannot be empty" );
         });
     });
 
@@ -45,14 +54,13 @@ describe( "Testing Register Auth Routes", () => {
             name: "test",
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.password ).toBe( "Password cannot be empty" );
+            expect( res.data.errors.password ).toBe( "Password cannot be empty" );
         });
     });
 
@@ -63,14 +71,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe( "Invalid email" );
+            expect( res.data.errors.email ).toBe( "Invalid email" );
         });
     });
 
@@ -81,14 +88,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe( "Invalid email" );
+            expect( res.data.errors.email ).toBe( "Invalid email" );
         });
     });
 
@@ -99,14 +105,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe( "Invalid email" );
+            expect( res.data.errors.email ).toBe( "Invalid email" );
         });
     });
 
@@ -117,14 +122,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe( "Invalid email" );
+            expect( res.data.errors.email ).toBe( "Invalid email" );
         });
     });
 
@@ -134,14 +138,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.name ).toBe( "Name cannot be empty" );
+            expect( res.data.errors.name ).toBe( "Name cannot be empty" );
         });
     });
 
@@ -152,14 +155,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.name ).toBe( "Name cannot be empty" );
+            expect( res.data.errors.name ).toBe( "Name cannot be empty" );
         });
     });
 
@@ -170,28 +172,27 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
             //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.password ).toBe( "Password is too short, password must be at least 8 charecter" );
+            expect( res.data.errors.password ).toBe( "Password is too short, password must be at least 8 charecter" );
         });
     });
 
     test( "Register Route: all fields empty",  () => {
         const newUser = {};
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors ).toEqual( {
+            expect( res.data.errors ).toEqual( {
                 password: "Password cannot be empty",
                 email: "Email cannot be empty",
                 name: "Name cannot be empty"
@@ -206,14 +207,13 @@ describe( "Testing Register Auth Routes", () => {
             password: "1234567489"
         };
 
-        return registerFetch( newUser )
+        return axiosInstance.post(
+            "/register",
+            newUser
+        )
         .then( ( res ) => {
-            //console.log( res );
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( (json) => {
-            expect( json.errors.email ).toBe("This email is already registered");
+            expect( res.data.errors.email ).toBe("This email is already registered");
         });
     });
 

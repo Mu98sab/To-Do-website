@@ -17,7 +17,7 @@ export default function Login(props) {
         setPassword, 
         setRememberMe, 
         submitEvent
-    } = useFetchAuth("http://localhost:4000/api/v1/login");     // pss the POST URL to the hook
+    } = useFetchAuth("/login");     // pass the POST action to the hook
 
     return (
         <div className={styles.flexContainer}>

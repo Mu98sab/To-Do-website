@@ -51,26 +51,8 @@ export const addMission = async (req, res) => {
         }
 
         // try to creatre the new mission
-        const newMission = await Mission.create( { ...missionObj, list_id } );
+        await Mission.create( { ...missionObj, list_id } );
 
-        // add the id of the new created mission to the mission list inside the list document with the id list_id
-        // try to update the list with the id taken from the params
-        await List.updateOne(
-
-            // query: update where the id list is same of the id from the params and the owner id is the id retrieved from the jwt token
-            { 
-                _id: list_id, 
-                owner: userID,
-            }, 
-
-            // the mission that need to be added
-            { 
-                $push : { 
-                    mission: newMission._id,
-                }
-            },
-        );
-        
         // DONE //
         res.status( 201 ).json();
 
@@ -180,6 +162,7 @@ export const updateMission = async ( req, res ) => {
     }
 };
 
+// TODO: think is it needed
 // get mission with a given list and mission id
 export const getMission = async ( req, res ) => {
 

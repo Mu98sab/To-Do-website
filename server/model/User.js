@@ -59,6 +59,22 @@ userSchema.post( "save", async function ( doc, next ) {
     next();
 });
 
+// After deleting the user (for test only)
+userSchema.post( "deleteOne", async function ( doc, next ) {
+
+    // delete the list where the owner the the id of the deleted user
+    if ( doc.deletedCount === 1 ) {
+        
+        await List.deleteOne(
+            {
+                owner: this._conditions._id
+            }
+        );
+    }
+
+    next( );
+});
+
 // create the model with the specified schema
 const User = mongoose.model("user", userSchema);
 

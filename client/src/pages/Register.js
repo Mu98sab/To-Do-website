@@ -18,7 +18,7 @@ export default function Register(props) {
         setPassword, 
         setRememberMe,
         submitEvent
-    } = useFetchAuth("http://localhost:4000/api/v1/register");
+    } = useFetchAuth("/register");
 
     const [name, setName] = useState("");
 

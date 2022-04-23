@@ -40,3 +40,6 @@ app.use( function ( req, res, next ) {
 // Api Routes
 app.use( "/api/v1", authRouter );     // auth routes
 app.use( "/api/v1", toDoRouter );      // to do routes
+
+// TODO: delete it if it is not used 
+export default app;

@@ -27,8 +27,6 @@ const useFetchAuth = (url) => {
             // try to send POST req to the server 
             const json = await fetchUserPOST(url, newUser);  
             
-             // TODO: delete the print
-             console.log(json);
              // then check if the json contain errors key, set the erros state to be the values getted from the errors key
              if (json.errors) {
                  setError(json.errors);
@@ -36,9 +34,6 @@ const useFetchAuth = (url) => {
              
              // if there is not errors
              else {      
-
-                 // TODO: delete the printo
-                 console.log(json.user);
 
                  // reload the page to redirect to reflect the changes (go to the home page)
                  window.location.reload(false);

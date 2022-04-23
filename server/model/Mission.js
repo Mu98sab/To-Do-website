@@ -118,6 +118,32 @@ missionSchema.pre( "updateOne", function ( next ) {
     next();
 });
 
+
+// TODO: test this function it's not tested!!!
+// Post save add the mission id to the mission list inside the list module
+missionSchema.post( "save",  async function ( doc, next ) {
+
+    // add the id of the new created mission to the mission list inside the list model with the id list_id
+    await List.updateOne(
+
+        // NOTE: no need to check the if the list belong to the user since it have been checked in the add mission controller so that the code will not reach here if the owner do not own the list
+
+        // query: update where the id list is same of the id from the params 
+        { 
+            _id: doc.list_id, 
+        }, 
+
+        // the mission that need to be added
+        { 
+            $push : { 
+                mission: doc._id,
+            }
+        },
+    );
+
+    next( );
+});
+
 // create the mission model from the mission schema
 const Mission = mongoose.model( "mission", missionSchema );
 

@@ -1,5 +1,4 @@
-const { loginFetch } = require("../util/test.helper");
-
+import { axiosInstance } from "../util/test.helper";
 
 describe( "Testing Login Auth Route", () => {
     
@@ -8,13 +7,13 @@ describe( "Testing Login Auth Route", () => {
             password: "1234567489"
         };
 
-        return loginFetch( newUser )
+        return axiosInstance.post(
+            "/login",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( ( json ) => {
-            expect( json.errors.email ).toBe( "Email cannot be empty" );
+            expect( res.data.errors.email ).toBe( "Email cannot be empty" );
         });
     });
 
@@ -23,13 +22,13 @@ describe( "Testing Login Auth Route", () => {
             email: "test@gmail.com"
         };
 
-        return loginFetch( newUser )
+        return axiosInstance.post(
+            "/login",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( ( json ) => {
-            expect( json.errors.password ).toBe( "Password cannot be empty" );
+            expect( res.data.errors.password ).toBe( "Password cannot be empty" );
         });
     });
 
@@ -39,13 +38,13 @@ describe( "Testing Login Auth Route", () => {
             password: "1234567489"
         };
 
-        return loginFetch( newUser )
+        return axiosInstance.post(
+            "/login",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( ( json ) => {
-            expect( json.errors.email ).toBe( "Email is not registered" );
+            expect( res.data.errors.email ).toBe( "Email is not registered" );
         });
     });
 
@@ -55,13 +54,13 @@ describe( "Testing Login Auth Route", () => {
             password: "moosaab1998"
         };
 
-        return loginFetch( newUser )
+        return axiosInstance.post(
+            "/login",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBeGreaterThanOrEqual( 400 );
-            return res.json();
-        })
-        .then( ( json ) => {
-            expect( json.errors.password ).toBe( "Incorrect password" );
+            expect( res.data.errors.password ).toBe( "Incorrect password" );
         });
     });
 
@@ -71,17 +70,13 @@ describe( "Testing Login Auth Route", () => {
             password: "1234567489"
         };
 
-        return loginFetch( newUser )
+        return axiosInstance.post(
+            "/login",
+            newUser
+        )
         .then( ( res ) => {
             expect( res.status ).toBe( 204 );
-            return res.json();
-        })
-        .then( ( json ) => {
-            console.log( json );
-            expect( json ).toEqual( {} );
-        })
-        .catch( ( err ) => {
-            console.log( err );
+            expect( res.data ).toEqual( "" );
         });
     });
 });

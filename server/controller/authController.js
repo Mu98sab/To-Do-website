@@ -54,7 +54,7 @@ export const registerController = async (req, res) => {
         );
 
         // 201 means that the user has been created successfully
-        res.status( 201 ).json();             
+        res.status( 201 ).json( );             
     }
     catch (err) {
         // send an error with 400 status 
@@ -110,7 +110,7 @@ export const loginController = async (req, res) => {
                     }
                 )
                 // if works fine, send the user object.
-                res.status( 204 ).json();
+                res.status( 204 ).json( );
             }
             else {
                 throw Error("Incorrect password");
@@ -154,3 +154,27 @@ export const isAuthenticatedController = (req, res) => {
    
 };
 
+export const deleteTestUser = async ( req, res ) => {
+    
+    // get the user id
+    const userId = req.body.id;
+
+    // delete the user if and only if the user has the email test2@gmail.com
+    const result = await User.deleteOne(
+        {
+            _id: userId,
+            email: "test2@gmail.com"
+        },
+    )
+    
+    // if deleted, send a responce with no content
+    if ( result.deletedCount == 1 ) {
+        res.status( 204 ).json( );
+    }
+
+    // if not deleted, send an error message
+    else {
+        res.status( 403 ).json( { errors: "Unautherized to perform this action" } );
+    }
+    
+}

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { isAuth } from "../api/AuthApi";
+import backendAPI from "../utils/axios.config";
 
 export const AuthContext = createContext();
 
@@ -12,20 +12,15 @@ export function AuthProvider({children}) {
         setLoading(true);
 
         // call is Authenticated
-        isAuth()
-        .then( (data) => {
-
-            // TODO: delete the print
-            console.log(data);
-
+        backendAPI.get( "/is-authenticated" )
+        .then( ( {data} ) => {
             // if responce contain errors then user not auth
-            if (data.errors) {
+            if ( data.errors ) {
                 setUser(null);
             }
             else {  // auth user set the user state
-                setUser(data);
+                setUser( data.user );
             }
-
             // stop the loading
             setLoading(false);
         });
